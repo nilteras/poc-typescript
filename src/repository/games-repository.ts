@@ -20,13 +20,21 @@ async function postGameDB(game: CreateGame) {
     return resultPost.rows[0]
 }
 
-// async function updateGameDB(game: Game): Promise<Game> {
-//     const resultUpdate = await db.query<Game>(
-//         `UPDATE games SET title = $1, platform = $2 WHERE id = $3 RETURNING`,
-//         [game.title, game.platform, game.id]
-//     )
-// }
 
-const gamesRepository = { getGamesDB, findGameDB , postGameDB }
+async function updateGameDB(game: Game): Promise<Game> {
+    const resultUpdate = await db.query<Game>(
+      "UPDATE games SET title = $1, platform = $2 WHERE id = $3 RETURNING *",
+      [game.title, game.platform, game.id]
+    );
+    return resultUpdate.rows[0];
+  }
+
+async function getGameByIdDB(gameId: number): Promise<Game | null> {
+    const result = await db.query<Game>("SELECT * FROM games WHERE id = $1", [gameId]);
+    return result.rows[0] || null;
+  }
+
+
+const gamesRepository = { getGamesDB, findGameDB , postGameDB, updateGameDB, getGameByIdDB }
 
 export default gamesRepository

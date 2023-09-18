@@ -18,6 +18,19 @@ async function postGames(req: Request, res: Response){
     res.sendStatus(httpStatus.CREATED)
 }
 
-const gamesController = { getGames, postGames }
+async function updateGames(req: Request, res: Response){
+    const gameId = parseInt(req.params.id);
+    const updatedGame = req.body as Game;
+   
+      const gameUpdate = await gamesService.updateGame(gameId, updatedGame);
+      
+      if (gameUpdate === null) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+      }
+  
+      res.send(gameUpdate);
+}
+
+const gamesController = { getGames, postGames, updateGames }
 
 export default gamesController

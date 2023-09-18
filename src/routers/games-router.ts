@@ -5,7 +5,7 @@ import { Router } from "express";
 const gamesRouter = Router();
 gamesRouter.get("/games", gamesController.getGames)
 gamesRouter.post("/games", gamesController.postGames)
-gamesRouter.put("/games/:id")
+gamesRouter.put("/games/:id", gamesController.updateGames)
 gamesRouter.delete("/games/:id")
 
 

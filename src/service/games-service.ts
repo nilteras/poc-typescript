@@ -8,11 +8,21 @@ async function getGames() {
 
 async function postGame(game: Game) {
     const gameExists = await gamesRepository.findGameDB(game)
-    if (gameExists.rowCount > 0) throw errors.conflictError('Jogo existente');
+    if (gameExists.rowCount > 0) throw errors.conflictError('Jogo');
 
     return await gamesRepository.postGameDB(game);
 }
 
-const gamesService = { getGames, postGame }
+async function updateGame(gameId: number, updateGame: Game): Promise<Game | null> {
+    const gameExists = await gamesRepository.getGameByIdDB(gameId)
+    if(!gameExists) throw errors.notFound('Nome do Jogo')
+
+    gameExists.title = updateGame.title;
+    gameExists.platform = updateGame.platform;
+
+    return await gamesRepository.updateGameDB(gameExists)
+}
+
+const gamesService = { getGames, postGame, updateGame }
 
 export default gamesService
