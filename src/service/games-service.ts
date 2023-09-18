@@ -23,6 +23,13 @@ async function updateGame(gameId: number, updateGame: Game): Promise<Game | null
     return await gamesRepository.updateGameDB(gameExists)
 }
 
-const gamesService = { getGames, postGame, updateGame }
+async function deleteGame(gameId: number): Promise<boolean> {
+    const gameExists = await gamesRepository.getGameByIdDB(gameId)
+    if(!gameExists) throw errors.notFound('Nome do Jogo')
+
+    return await gamesRepository.deleteGameDB(gameId);
+}
+
+const gamesService = { getGames, postGame, updateGame, deleteGame }
 
 export default gamesService
